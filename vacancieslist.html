@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vacancies list</title>
+    <link rel="stylesheet" href="nice-select.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="jquery.nice-select.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Ubuntu');
+
+        .vacancy-form-control {
+            font-family: 'Ubuntu', sans-serif;
+            display: block;
+            width: 100%;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .vacancy-select {
+            height: 38px;
+            padding-left: 13px;
+            color: #495057;
+            font-size: 15px;
+            border: 1px solid #ced4da;
+        }
+
+        .vacancies-list-search {
+            margin: 20px auto;
+            background-color: #c4c4c4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 7px;
+            box-shadow: 0px 7px 8px 0px rgba(0, 0, 0, 0.25);
+            padding: 12px;
+            max-width: 1280px;
+            box-sizing: border-box;
+        }
+
+        .search-btn {
+            height: 38px;
+            border-radius: 7px;
+            position: relative;
+            outline: none;
+            border: none;
+            color: white;
+            background-color: #e61849;
+            padding: 0 10px 0 30px;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .search-btn:after {
+            content: '';
+            background-image: url("searchbtnicon.svg");
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            height: 20px;
+            width: 20px;
+            background-size: cover;
+        }
+
+        .search-btn:hover {
+            background-color: #f70f47;
+        }
+
+        #vacancy-name {
+            margin-right: 3%;
+            width: 50%;
+        }
+
+        .select-wrap {
+            width: 20%;
+            margin-right: 3%;
+        }
+
+        .vacancies-list-table {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        .vacancies-list-table thead th {
+            width: 15%;
+            padding: 5px;
+            border-top: 2px solid #c4c4c4;
+            background-color: #1b358a;
+            color: white;
+        }
+
+        .vacancies-list-table thead th:nth-child(2) {
+            width: 22.5%;
+        }
+
+        .vacancies-list-table thead th:first-child {
+            width: 2.5%;
+            border-left: 2px solid #c4c4c4;
+        }
+
+        .vacancies-list-table thead th:last-child {
+            border-right: 2px solid #c4c4c4;
+        }
+
+        .vacancies-list-table tbody td, .vacancies-list-table tbody th {
+            border: 2px solid #c4c4c4;
+            padding: 5px;
+            text-align: center;
+            background-color: white;
+        }
+
+        .vacancies-list-wrap {
+            background-color: #f4fbfb;
+            font-family: "Ubuntu", sans-serif;
+            color: #363636;
+            padding: 50px 0;
+        }
+
+        .nice-select li[data-value=edit],  .nice-select li[data-value=delete],  .nice-select li[data-value=activate], .nice-select li[data-value=deactivate] {
+            position: relative;
+            padding-left: 43px;
+        }
+        .nice-select li[data-value=edit]:after,  .nice-select li[data-value=delete]:after,  .nice-select li[data-value=activate]:after, .nice-select li[data-value=deactivate]:after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 18px;
+            width: 20px;
+            height: 20px;
+            background-size: cover;
+        }
+        .nice-select li[data-value=edit]:after {
+            background-image: url("edit.png");
+        }
+        .nice-select li[data-value=delete]:after {
+            background-image: url("delete.png");
+        }
+        .nice-select li[data-value=activate]:after {
+            background-image: url("activate.png");
+        }
+        .nice-select li[data-value=deactivate]:after {
+            background-image: url("deactivate.png");
+        }
+    </style>
+</head>
+<body>
+<div class="vacancies-list-wrap">
+    <form id="vacancies-list-search" class="vacancies-list-search">
+        <input type="text" class="vacancy-form-control" value="Наименование" id="vacancy-name">
+        <div class="select-wrap">
+            <select name="category" id="category" class="vacancy-form-control vacancy-select wide">
+                <option value="sfera">Категория</option>
+                <option value="buhgalter">Бухгалтер</option>
+                <option value="programist">Программист</option>
+                <option value="jurist">Юрист</option>
+                <option value="hr">HR</option>
+            </select>
+        </div>
+        <div class="select-wrap">
+            <select class="vacancy-form-control vacancy-select wide" name="city" id="city">
+                <option value="misto">Город</option>
+                <option value="kiev">Киев</option>
+                <option value="kharkov">Харьков</option>
+                <option value="lvov">Львов</option>
+                <option value="nikolaev">Николаев</option>
+            </select>
+        </div>
+        <button class="search-btn">Пошук</button>
+    </form>
+    <table class="vacancies-list-table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Наименование</th>
+            <th scope="col">Категория</th>
+            <th scope="col">Город</th>
+            <th scope="col">Дата добавления</th>
+            <th scope="col">Действие</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Backend разработчик php</td>
+            <td>Программист</td>
+            <td>Киев</td>
+            <td>18.05.2018</td>
+            <td><select name="action" id="action" class="vacancy-select wide">
+                <option value="edit">редактировать</option>
+                <option value="delete">удалить</option>
+                <option value="activate">активировать</option>
+                <option value="deactivate">деактивировать</option>
+            </select></td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Адвокат по гражданским делам</td>
+            <td>Юрист</td>
+            <td>Харьков</td>
+            <td>30.09.2018</td>
+            <td><select name="action" id="action" class="vacancy-select wide">
+                <option value="edit">редактировать</option>
+                <option value="delete">удалить</option>
+                <option value="activate">активировать</option>
+                <option value="deactivate">деактивировать</option>
+            </select></td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Экономист в банк</td>
+            <td>Бухгалтер</td>
+            <td>Николаев</td>
+            <td>18.05.2017</td>
+            <td><select name="action" id="action" class="vacancy-select wide">
+                <option value="edit">редактировать</option>
+                <option value="delete">удалить</option>
+                <option value="activate">активировать</option>
+                <option value="deactivate">деактивировать</option>
+            </select></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('select').niceSelect();
+        console.log($('[data-value=delete]'));
+    });
+</script>
+</body>
+</html>
